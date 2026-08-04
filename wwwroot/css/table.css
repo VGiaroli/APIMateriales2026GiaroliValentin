@@ -1,0 +1,288 @@
+/* ===================================================================
+   table.css — header de página, toolbar, tabla de datos y paginación
+   Requiere las variables definidas en sidebar.css (--admin-accent, etc.)
+   =================================================================== */
+.hr-abajoTitulo {
+  border: none;
+  border-top: 2px dotted #dfdfdf; /* Creamos el efecto punteado */
+  margin: 0 0 1.5rem 0;
+  opacity: 1;                               
+}
+
+.page-head {
+  display: flex;
+  align-items: self-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.1rem;
+}
+
+.page-head h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--admin-text);
+  letter-spacing: -0.01em;
+}
+
+.page-head p {
+  margin: 0.2rem 0 0;
+  color: var(--admin-muted);
+  font-size: 0.9rem;
+}
+
+.btn-agregar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.62rem 1.1rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 10px 20px rgba(251, 109, 76, 0.28);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.btn-agregar:hover,
+.btn-agregar:focus {
+  background: var(--admin-accent-dark);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ── Toolbar: búsqueda + acciones ── */
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+
+.btn-ghost i { color: var(--admin-accent); font-size: 0.95rem; }
+
+.btn-ghost:hover,
+.btn-ghost:focus {
+  border-color: var(--admin-accent);
+  box-shadow: var(--admin-ring);
+  color: var(--admin-text);
+}
+
+/* ── Tabla ── */
+.table-card {
+  background: var(--admin-surface);
+  border: 1px solid #d8d8d8;
+  border-radius: 14px;
+  box-shadow: var(--admin-shadow-sm);
+  overflow: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.data-table thead th {
+  text-align: left;
+  padding: 0.85rem 1.1rem;
+  background: var(--admin-surface-soft);
+  color: var(--admin-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--admin-border);
+  white-space: nowrap;
+}
+
+.data-table tbody td {
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1px solid var(--admin-border);
+  color: var(--admin-text);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+.data-table tbody tr:hover { background: var(--admin-surface-soft); }
+
+.row-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.row-thumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  object-fit: cover;
+  background: var(--admin-surface-soft);
+  border: 1px solid var(--admin-border);
+  flex: 0 0 auto;
+}
+
+.row-name {
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+a.row-name { color: var(--admin-accent-dark); }
+a.row-name:hover { color: var(--admin-accent); }
+
+.badge-code {
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.price-cell { font-weight: 700; color: var(--admin-text); }
+
+.action-cell { display: flex; align-items: center; gap: 0.7rem; }
+
+.action-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--admin-muted);
+  transition: color 0.15s ease;
+}
+
+.action-btn.edit:hover { color: var(--admin-accent); }
+.action-btn.delete { color: #e0554a; }
+.action-btn.delete:hover { color: #c23f35; }
+
+/* ── Paginación ── */
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.1rem;
+  border-top: 1px solid var(--admin-border);
+  font-size: 0.85rem;
+  color: var(--admin-muted);
+  font-weight: 600;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pagination button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 0.55rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.pagination button:hover { border-color: var(--admin-accent); }
+
+.pagination button.active {
+  background: var(--admin-accent);
+  border-color: var(--admin-accent);
+  color: #fff;
+}
+
+.pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 767.98px) {
+  .table-card { overflow-x: auto; }
+  .data-table { min-width: 760px; }
+}
+
+.btn-accion {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    transition: all .2s ease;
+    line-height: 1;
+}
+
+.btn-accion i {
+    font-size: 0.95rem;
+}
+
+.btn-editar {
+    margin-right: 12px;
+}
+
+.btn-editar:hover {
+    color: #2563eb;
+    transform: scale(1.15);
+}
+
+/* Eliminar */
+.btn-eliminar {
+    color: #ef4444;
+}
+
+.btn-eliminar:hover {
+    color: #dc2626;
+    transform: scale(1.15);
+}
+
+.btn-accion:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* ERROR PARA LAS VALIDACIONES */
+.error-field {
+    display: block;
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.form-control-custom.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545;
+}

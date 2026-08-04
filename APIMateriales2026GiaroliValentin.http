@@ -1,0 +1,6 @@
+@APIMateriales2026GiaroliValentin_HostAddress = http://localhost:5048
+
+GET {{APIMateriales2026GiaroliValentin_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

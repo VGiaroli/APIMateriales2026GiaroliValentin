@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materiales</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/wwwroot/css/sidebar.css">
+
+    <link rel="stylesheet" href="/wwwroot/css/table.css">
+</head>
+
+<body>
+    <div style="padding: 24px;">
+
+        <div class="page-head">
+            <div>
+                <h1>Materiales</h1>
+                <p>Administrá el inventario de materiales</p>
+            </div>
+            <button class="btn-agregar" type="button" onclick="abrirModalCrear()">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                Agregar
+            </button>
+        </div>
+        <hr class="hr-abajoTitulo">
+        <div class="table-card">
+            <table class="data-table" id="tablaMateriales">
+                <thead>
+                    <tr>
+                        <th>Descripcion</th>
+                        <th>Precio Costo</th>
+                        <th>Rubro</th>
+                        <th class="text-center">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="materiales-tbody">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalRegistro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="editarLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo">Agregar Material</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" id="materialID" value="0">
+                        <div class="col-12 mb-3">
+                            <label for="descripcion" class="form-label fw-semibold">Descripcion</label>
+                            <input type="text" id="descripcion" class="form-control form-control-custom"
+                                placeholder="Descripcion">
+
+                            <span class="error-field d-none" id="errorDescripcion">
+        <i class="bi bi-exclamation-circle-fill"></i> La descripción es requerida.
+    </span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="precioCosto" class="form-label fw-semibold">Precio Costo</label>
+                            <input type="number" id="precioCosto" class="form-control form-control-custom"
+                                placeholder="Precio Costo">
+
+                            <span class="error-field d-none" id="errorPrecioCosto">
+        <i class="bi bi-exclamation-circle-fill"></i> El precio costo es requerido.
+    </span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="rubroID" class="form-label fw-semibold">Rubro</label>
+                            <select id="rubroID" class="form-select form-control-custom">
+                                <option value="0">--Seleccionar Rubro--</option>
+                            </select>
+                            
+                           <span class="error-field d-none" id="errorRubro">
+        <i class="bi bi-exclamation-circle-fill"></i> Debe seleccionar un rubro.
+    </span> 
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="GuardarRegistro()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/wwwroot/js/sidebar-loader.js"></script>
+    <script src="/wwwroot/js/materiales.js"></script>
+</body>
+
+</html>
