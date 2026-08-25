@@ -4,8 +4,7 @@
   var PARTIAL_URL = "/wwwroot/views/components/sidebar.html";
   var SIDEBAR_SCRIPT_URL = "/wwwroot/js/sidebar.js";
 
-  // Oculta el body hasta que el layout esté armado, para evitar el
-  // parpadeo de "contenido sin sidebar" un instante antes de inyectar.
+
   document.documentElement.style.visibility = "hidden";
 
   function run() {
@@ -25,10 +24,8 @@
   }
 
   function injectLayout(partialHtml) {
-    // 1. Guardamos el contenido que la página ya tenía en el body.
     var pageContent = Array.prototype.slice.call(document.body.childNodes);
 
-    // 2. Parseamos el partial en un contenedor temporal (no está en el DOM todavía).
     var temp = document.createElement("div");
     temp.innerHTML = partialHtml;
 
@@ -40,13 +37,11 @@
       throw new Error("El partial no tiene la estructura esperada (.admin-sidebar / .sidebar-backdrop / .admin-main)");
     }
 
-    // 3. Vaciamos el body y reconstruimos en el orden correcto.
     document.body.innerHTML = "";
     document.body.appendChild(aside);
     document.body.appendChild(backdrop);
 
-    // 4. El contenido original de la página va DENTRO de .admin-main,
-    //    después del navbar (así hereda el margin-left del layout).
+
     pageContent.forEach(function (node) {
       adminMain.appendChild(node);
     });

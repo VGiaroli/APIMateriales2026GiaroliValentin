@@ -31,7 +31,6 @@ function MostrarMaterial(material) {
     })
 }
 
-// Agrega esto fuera de tus funciones
 document.getElementById('modalRegistro').addEventListener('hidden.bs.modal', function () {
     limpiarFormulario();
 });
@@ -151,7 +150,7 @@ function GuardarRegistro() {
 
     //LLAMAMOS A LA FUNCION VALIDACIONES PARA LOS INPUTS
     if (!validarFormulario(descripcion, precioCosto, rubroID)) {
-        return; // corta la ejecución si hay errores
+        return; 
     }
 
     let guardarMaterial = {
