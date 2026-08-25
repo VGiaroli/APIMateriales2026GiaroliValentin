@@ -10,5 +10,9 @@ namespace APIMateriales2026GiaroliValentin.Models
         public string Descripcion {get; set;}
 
         public bool Eliminado {get; set; }
+
+        public decimal CostoTotal {get; set;}
+
+        public ICollection<MaterialProducto> MaterialProductos {get; set;} = new List<MaterialProducto>();
     }
 }

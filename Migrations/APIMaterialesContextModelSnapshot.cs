@@ -49,6 +49,38 @@ namespace APIMateriales2026GiaroliValentin.Migrations
                     b.ToTable("Materiales");
                 });
 
+            modelBuilder.Entity("APIMateriales2026GiaroliValentin.Models.MaterialProducto", b =>
+                {
+                    b.Property<int>("MaterialProductoID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaterialProductoID"));
+
+                    b.Property<decimal>("Cantidad")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("MaterialID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PrecioCostoUnitario")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductoID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("MaterialProductoID");
+
+                    b.HasIndex("MaterialID");
+
+                    b.HasIndex("ProductoID");
+
+                    b.ToTable("MaterialProductos");
+                });
+
             modelBuilder.Entity("APIMateriales2026GiaroliValentin.Models.Producto", b =>
                 {
                     b.Property<int>("ProductoID")
@@ -56,6 +88,9 @@ namespace APIMateriales2026GiaroliValentin.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductoID"));
+
+                    b.Property<decimal>("CostoTotal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
@@ -98,6 +133,35 @@ namespace APIMateriales2026GiaroliValentin.Migrations
                         .IsRequired();
 
                     b.Navigation("Rubro");
+                });
+
+            modelBuilder.Entity("APIMateriales2026GiaroliValentin.Models.MaterialProducto", b =>
+                {
+                    b.HasOne("APIMateriales2026GiaroliValentin.Models.Material", "Material")
+                        .WithMany("MaterialProductos")
+                        .HasForeignKey("MaterialID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("APIMateriales2026GiaroliValentin.Models.Producto", "Producto")
+                        .WithMany("MaterialProductos")
+                        .HasForeignKey("ProductoID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Material");
+
+                    b.Navigation("Producto");
+                });
+
+            modelBuilder.Entity("APIMateriales2026GiaroliValentin.Models.Material", b =>
+                {
+                    b.Navigation("MaterialProductos");
+                });
+
+            modelBuilder.Entity("APIMateriales2026GiaroliValentin.Models.Producto", b =>
+                {
+                    b.Navigation("MaterialProductos");
                 });
 
             modelBuilder.Entity("APIMateriales2026GiaroliValentin.Models.Rubro", b =>

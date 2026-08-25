@@ -15,5 +15,7 @@ namespace APIMateriales2026GiaroliValentin.Models
         public DbSet<Producto> Productos {get; set;}
 
         public DbSet<Rubro> Rubros {get; set;}
+
+        public DbSet<MaterialProducto> MaterialProductos {get; set;}
     }
 }

@@ -28,6 +28,7 @@
             </button>
         </div>
         <hr class="hr-abajoTitulo">
+
         <div class="table-card">
             <table class="data-table" id="tablaProductos">
                 <thead>
@@ -61,8 +62,8 @@
                             <input type="text" id="descripcion" class="form-control form-control-custom"
                                 placeholder="Descripcion">
                             <span class="error-field d-none" id="errorDescripcion">
-        <i class="bi bi-exclamation-circle-fill"></i> La descripción es requerida.
-    </span>
+                                <i class="bi bi-exclamation-circle-fill"></i> La descripción es requerida.
+                            </span>
                         </div>
 
                         <div class="col-md-16 mb-3" id="contenedorEstado" style="display:none;">
@@ -77,6 +78,70 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" onclick="guardarRegistro();">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA ASIGNARLE UN MATERIAL A UN PRODUCTO-->
+    <div class="modal fade" id="modalAsignarMaterial" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="agregarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo">ASIGNAR MATERIALES</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="composicionProductoID" value="0">
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="materialID" class="form-label fw-semibold">Material</label>
+                            <select id="materialID" class="form-select form-control-custom">
+                                <option value="0">--Seleccionar Material--</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="cantidad" class="form-label fw-semibold">Costo unitario</label>
+                            <input type="number" id="cantidad" class="form-control form-control-custom"
+                                placeholder="cantidad">
+                        </div>
+                    </div>
+
+                    <!-- ALERTA INPUTS NO COMPLETADOS -->
+                    <div id="alerta" class="alert alert-danger mt-3 d-none" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <span id="mensajeAlerta"></span>
+                    </div>
+
+                    <hr class="divider-dashed my-4">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-start">Descripción Material</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio costo unitario</th>
+                                    <th>Subtotal</th>
+                                    <th>CostoTotal</th>
+                                    <th class="text-center">Accion</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-composicion-materiales">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link text-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn-custom-primary px-4" onclick="guardarMaterial();">
+                        <i class="bi bi-check-circle"></i> Guardar
+                    </button>
                 </div>
             </div>
         </div>

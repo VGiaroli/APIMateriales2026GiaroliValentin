@@ -286,3 +286,13 @@ a.row-name:hover { color: var(--admin-accent); }
 .form-select.is-invalid {
     border-color: #dc3545;
 }
+
+/* Composicion */
+.btn-composicion {
+    color: #ef9144;
+}
+
+.btn-composicion:hover {
+    color: #dc6f26;
+    transform: scale(1.15);
+}

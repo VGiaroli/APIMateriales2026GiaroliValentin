@@ -20,10 +20,13 @@ function MostrarProductos(productos) {
             "<td class='text-center'>"
             +
             "<button class='btn-accion btn-editar me-2' title='Editar' onclick='buscarProducto(" + productos.productoID + ")'>" +
-            "<i class='bi bi-pencil-square'></i></button>" 
+            "<i class='bi bi-pencil-square'></i></button>"
             +
             "<button class='btn-accion btn-eliminar me-2' title='Eliminar' onclick='confirmarEliminar(" + productos.productoID + ")'>" +
             "<i class='bi bi-trash3-fill'></i></button>"
+            +
+            "<button class='btn-accion btn-composicion me-2' title='Composición' onclick='abrirModalComposición(" + productos.productoID + ")'>" +
+            "<i class='bi bi-box-seam'></i></button>"
             +
             "</td>" +
             "</tr>"
@@ -180,3 +183,115 @@ function limpiarFormulario() {
     document.getElementById('errorDescripcion').classList.add('d-none');
 }
 
+function obtenerMateriales() {
+    fetch("http://localhost:5048/api/Materiales")
+        .then(resp => resp.json())
+        .then(materiales => {
+            let select = document.getElementById("materialID");
+            select.innerHTML = '<option value="0">--Seleccionar Materiales--</option>';
+            materiales.forEach(material => {
+                let opt = document.createElement("option");
+                opt.value = material.materialID;
+                opt.text = material.descripcion;
+                select.add(opt);
+            });
+        })
+        .catch(error => console.error("Error cargando materiales:", error));
+}
+
+async function abrirModalComposición(id) {
+    document.getElementById("composicionProductoID").value = id;
+    obtenerMateriales();
+    await buscarMaterialesProducto(id);
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('modalAsignarMaterial')).show();
+}
+
+async function buscarMaterialesProducto(id) {
+    try {
+        const respuesta = await fetch(`http://localhost:5048/api/Productos/MostrarComposicionProducto/${id}`, {
+            method: 'GET',
+            headers: { "Content-Type": "application/json" }
+        });
+
+        if (!respuesta.ok) throw new Error("No se puede obtener el material.");
+
+        const materialesProducto = await respuesta.json();
+        const bodyMaterialesProducto = document.getElementById("tbody-composicion-materiales");
+        bodyMaterialesProducto.innerHTML = "";
+
+        if (materialesProducto.length > 0) {
+            materialesProducto.forEach((material) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${material.descripcion}</td>
+                    <td>${material.cantidad}</td>
+                    <td>${material.precioCostoUnitario}</td>
+                    <td>${material.subTotal}</td>
+                    <td>${material.costoTotal}</td>
+                    <td class="text-center">
+                        <button class="btn-accion btn-eliminar" onclick="eliminarMaterialesProducto(${material.materialProductoID})">
+                            <i class='bi bi-trash3-fill'></i>
+                        </button>
+                    </td>
+                `;
+                bodyMaterialesProducto.appendChild(tr);
+            });
+        } else {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td class='text-danger' colspan='5'>ACTUALMENTE EL PRODUCTO NO POSEE MATERIALES</td>`;
+            bodyMaterialesProducto.appendChild(tr);
+        }
+    }
+    catch (error) {
+        console.error("Error composición material:", error);
+    }
+}
+
+async function guardarMaterial() {
+    const productoID = document.getElementById("composicionProductoID").value;
+    const materialID = document.getElementById("materialID").value;
+    const cantidad = document.getElementById("cantidad").value;
+
+    if (!(productoID > 0 && materialID > 0 && cantidad > 0)) {
+        return;
+    }
+
+    const composicion = {
+        materialProductoID: 0,
+        productoID: productoID,
+        materialID: materialID,
+        cantidad: cantidad
+    }
+
+    const respuesta = await fetch(`http://localhost:5048/api/Productos/GuardarComposicionMaterial`, {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(composicion)
+    });
+
+    if(respuesta.ok){
+        document.getElementById("materialID").value = "0",
+        document.getElementById("cantidad").value = "",
+        buscarMaterialesProducto(productoID);
+
+    }else{
+        console.error("Error al guardar la composición");
+    }
+}
+
+async function eliminarMaterialesProducto(id) {
+    try {
+        const respuesta = await fetch(`http://localhost:5048/api/Productos/EliminarComposicionMaterial/${id}`, {
+            method: 'DELETE',
+            headers: { "Content-Type": "application/json" }
+        });
+
+        if (!respuesta.ok) throw new Error("No se pudo eliminar");
+
+        const productoID = document.getElementById("composicionProductoID").value; 
+        buscarMaterialesProducto(productoID);
+    }
+    catch (error) {
+        console.error("Error eliminar composición material:", error);
+    }
+}
