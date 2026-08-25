@@ -4,7 +4,7 @@
    =================================================================== */
 .hr-abajoTitulo {
   border: none;
-  border-top: 2px dotted #dfdfdf; /* Creamos el efecto punteado */
+  border-top: 2px dotted #dfdfdf; 
   margin: 0 0 1.5rem 0;
   opacity: 1;                               
 }
