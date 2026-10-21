@@ -17,6 +17,9 @@ function MostrarProductos(productos) {
             // "<td>" + productos.productoID + "</td>" +
             "<td>" + productos.descripcion + "</td>" +
             "<td>" + estadoProductos + "</td>" +
+            "<td>" + productos.porcentajeGanancia + "</td>" +
+            "<td>" + productos.precioVenta + "</td>" +
+            "<td>" + productos.costoTotal + "</td>" +
             "<td class='text-center'>"
             +
             "<button class='btn-accion btn-editar me-2' title='Editar' onclick='buscarProducto(" + productos.productoID + ")'>" +
@@ -79,6 +82,13 @@ function buscarProducto(id) {
         .then(producto => {
             document.getElementById('productoID').value = producto.productoID;
             document.getElementById('descripcion').value = producto.descripcion;
+
+            // Costo total real del producto (necesario para calcular el precio de venta)
+            document.getElementById('costoTotal').value = producto.costoTotal;
+            document.getElementById('costoTotalVisible').value = producto.costoTotal;
+
+            document.getElementById('porcentajeGanancia').value = producto.porcentajeGanancia;
+            document.getElementById('precioVenta').value = producto.precioVenta;
             document.getElementById('eliminado').value = producto.eliminado.toString();
             document.getElementById('contenedorEstado').style.display = 'block';
             document.getElementById('modalTitulo').textContent = "Editar Producto";
@@ -102,8 +112,29 @@ function validarFormulario(descripcion) {
     return esValido;
 }
 
+
+//FUNCIONES PARA CALCULAR PORCENTAJE DE LA GANANCIA 
+function calcularPrecioVenta(precioCostoUnitario, porcentajeGanancia) {
+    return precioCostoUnitario + (precioCostoUnitario * (porcentajeGanancia / 100));
+}
+
+function calcularPorcentajeGanancia(precioCostoUnitario, precioVenta) {
+    return ((precioVenta - precioCostoUnitario) / precioCostoUnitario) * 100;
+}
+
+function actualizarPrecioVenta() {
+    const costoTotal = parseFloat(document.getElementById('costoTotal').value) || 0;
+    const porcentaje = parseFloat(document.getElementById('porcentajeGanancia').value) || 0;
+
+    const resultado = calcularPrecioVenta(costoTotal, porcentaje);
+
+    document.getElementById('precioVenta').value = resultado.toFixed(2);
+}
+
 function guardarRegistro() {
-    const productoID = document.getElementById('productoID').value;
+    const productoID = parseInt(document.getElementById('productoID').value) || 0;
+    const precioVenta = parseFloat(document.getElementById('precioVenta').value) || 0;
+    const porcentajeGanancia = parseFloat(document.getElementById('porcentajeGanancia').value) || 0;
     const descripcion = document.getElementById('descripcion').value.trim();
     const eliminado = document.getElementById("eliminado").value === "true"
 
@@ -114,9 +145,10 @@ function guardarRegistro() {
     const guardarProducto = {
         productoID: productoID,
         descripcion: descripcion,
-        eliminado: eliminado
+        eliminado: eliminado,
+        precioVenta: precioVenta,
+        porcentajeGanancia: porcentajeGanancia
     }
-
 
     if (productoID > 0) {
         fetch(`http://localhost:5048/api/Productos/${productoID}`, {
@@ -124,8 +156,11 @@ function guardarRegistro() {
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
             body: JSON.stringify(guardarProducto)
         })
-            .then(response => {
-                if (!response.ok) !response.json().then(error => { throw error() })
+            .then(async response => {
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(text || `Error ${response.status}`);
+                }
                 $('#modalRegistro').modal('hide');
                 Swal.fire({
                     title: "Editado con éxito!",
@@ -136,6 +171,7 @@ function guardarRegistro() {
                     timerProgressBar: true,
                     showConfirmButton: false
                 });
+
                 obtenerProductos();
             })
             .catch(error => console.error("Error al editar el producto: ", error))
@@ -175,8 +211,12 @@ function limpiarFormulario() {
     // ocultarAlerta();
     document.getElementById('productoID').value = "0";
     document.getElementById('descripcion').value = "";
+    document.getElementById('costoTotal').value = "0";
+    document.getElementById('costoTotalVisible').value = "0";
+    document.getElementById('porcentajeGanancia').value = "0";
+    document.getElementById('precioVenta').value = "0";
     document.getElementById('contenedorEstado').style.display = 'none';
-    document.getElementById('modalTitulo').textContent = "Agregar Producto";
+    document.getElementById('modalTitulo').textContent = "Agregar Producto"
 
 
     document.getElementById('descripcion').classList.remove('is-invalid');
@@ -227,7 +267,6 @@ async function buscarMaterialesProducto(id) {
                     <td>${material.cantidad}</td>
                     <td>${material.precioCostoUnitario}</td>
                     <td>${material.subTotal}</td>
-                    <td>${material.costoTotal}</td>
                     <td class="text-center">
                         <button class="btn-accion btn-eliminar" onclick="eliminarMaterialesProducto(${material.materialProductoID})">
                             <i class='bi bi-trash3-fill'></i>
@@ -248,9 +287,9 @@ async function buscarMaterialesProducto(id) {
 }
 
 async function guardarMaterial() {
-    const productoID = document.getElementById("composicionProductoID").value;
-    const materialID = document.getElementById("materialID").value;
-    const cantidad = document.getElementById("cantidad").value;
+    const productoID = parseInt(document.getElementById("composicionProductoID").value);
+    const materialID = parseInt(document.getElementById("materialID").value);
+    const cantidad = parseFloat(document.getElementById("cantidad").value);
 
     if (!(productoID > 0 && materialID > 0 && cantidad > 0)) {
         return;
@@ -263,19 +302,26 @@ async function guardarMaterial() {
         cantidad: cantidad
     }
 
-    const respuesta = await fetch(`http://localhost:5048/api/Productos/GuardarComposicionMaterial`, {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(composicion)
-    });
+    try {
+        const respuesta = await fetch(`http://localhost:5048/api/Productos/GuardarComposicionMaterial`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(composicion)
+        });
 
-    if(respuesta.ok){
-        document.getElementById("materialID").value = "0",
-        document.getElementById("cantidad").value = "",
-        buscarMaterialesProducto(productoID);
+        if (!respuesta.ok) {
+            const texto = await respuesta.text();
+            throw new Error(texto || `Error ${respuesta.status}`);
+        }
 
-    }else{
-        console.error("Error al guardar la composición");
+        document.getElementById("materialID").value = "0";
+        document.getElementById("cantidad").value = "";
+
+        await buscarMaterialesProducto(productoID);
+        await obtenerProductos();
+
+    } catch (error) {
+        console.error("Error al guardar la composición:", error);
     }
 }
 
@@ -288,7 +334,7 @@ async function eliminarMaterialesProducto(id) {
 
         if (!respuesta.ok) throw new Error("No se pudo eliminar");
 
-        const productoID = document.getElementById("composicionProductoID").value; 
+        const productoID = document.getElementById("composicionProductoID").value;
         buscarMaterialesProducto(productoID);
     }
     catch (error) {

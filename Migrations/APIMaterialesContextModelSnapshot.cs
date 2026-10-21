@@ -99,6 +99,12 @@ namespace APIMateriales2026GiaroliValentin.Migrations
                     b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("PorcentajeGanancia")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PrecioVenta")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("ProductoID");
 
                     b.ToTable("Productos");

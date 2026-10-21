@@ -61,7 +61,20 @@ namespace APIMateriales2026GiaroliValentin.Models
                 return BadRequest(new { message = "La descripción es requerida." });
             }
 
-            _context.Entry(producto).State = EntityState.Modified;
+            // _context.Entry(producto).State = EntityState.Modified;
+            var productoDB = await _context.Productos.FindAsync(id);
+            if (productoDB == null)
+            {
+                return NotFound();
+            }
+
+            // Campos editables desde el modal
+            productoDB.Descripcion = producto.Descripcion;
+            productoDB.Eliminado = producto.Eliminado;
+            productoDB.PorcentajeGanancia = producto.PorcentajeGanancia;
+
+            // PrecioVenta viene ya calculado desde JS (actualizarPrecioVenta)
+            productoDB.PrecioVenta = producto.PrecioVenta;
 
             try
             {
@@ -130,6 +143,11 @@ namespace APIMateriales2026GiaroliValentin.Models
             var material = await _context.Materiales
                 .Where(m => m.MaterialID == composicion.MaterialID)
                 .FirstOrDefaultAsync();
+            
+            if (producto == null || material == null)
+            {
+                return NotFound(new { message = "Producto o Material no encontrado." });
+            }
 
             //OBTENEMOS EL COSTO UNITARIO DEL MATERIAL Y 
             //CALCULAMOS EL SUBTOTAL
@@ -147,6 +165,7 @@ namespace APIMateriales2026GiaroliValentin.Models
 
             //ACTUALIZAMOS EL COSTO TOTAL DEL PRODUCTO
             producto.CostoTotal = costoTotal;
+            // producto.PrecioVenta = costoTotal + (costoTotal * (producto.PorcentajeGanancia / 100));
             await _context.SaveChangesAsync();
 
             return Ok(new
@@ -161,6 +180,7 @@ namespace APIMateriales2026GiaroliValentin.Models
             }
             );
         }
+
 
         [HttpDelete("EliminarComposicionMaterial/{id}")]
         public async Task<IActionResult> EliminarMaterialComposicion(int id)

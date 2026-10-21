@@ -120,6 +120,7 @@ function validarFormulario(descripcion, precioCosto, rubroID) {
     }
 
     // Precio Costo
+    //isNaN sirve para asegurarse de que el identificador realmente sea un valor numérico válido
     if (isNaN(precioCosto) || precioCosto <= 0) {
         document.getElementById('precioCosto').classList.add('is-invalid');
         document.getElementById('errorPrecioCosto').classList.remove('d-none');
@@ -130,6 +131,7 @@ function validarFormulario(descripcion, precioCosto, rubroID) {
     }
 
     // Rubro
+    //isNaN sirve para asegurarse de que el identificador realmente sea un valor numérico válido
     if (rubroID === 0 || isNaN(rubroID)) {
         document.getElementById('rubroID').classList.add('is-invalid');
         document.getElementById('errorRubro').classList.remove('d-none');

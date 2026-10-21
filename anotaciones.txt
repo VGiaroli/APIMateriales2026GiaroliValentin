@@ -1,0 +1,26 @@
+// anotaciones para corregir o mejorar
+1. AGREGAR VALIDACIONES A LAS NUEVAS FUNCIONALIDADES EN Productos.
+2. CUANDO BORRO UN MATERIAL, SE DEBE ACTUALIZAR ENSEGUIDA EL COSTO TOTAL, LA FUNCIONALIDAD ESTÁ EN EL BACK
+PERO NO LO EJECUTA EN EL FRONT.
+3. ACOMODAR LOS RESULTADOS A LA DERECHA, IZQUIERDA O CENTRO.
+
+
+////////////////////////
+       INTERFAZ      
+////////////////////////
+De acuerdo a lo trabajado con la generación de informes con la libreria de jspdf, deberán hacer los siguientes informes:
+
+LOS ALUMNOS QUE NO CURSEN PROGRAMACIÓN 3 O NO TENGAN LA API DE CADA PROYECTO, DEBEN HACER LA MISMA ACTIVIDAD PROGRAMANDO VISTAS CON DATOS FIJOS
+
+Gestión de Alumnos:
+Listado de Alumnos
+Listado de Docentes
+Promedio de Alumnos
+Promedio de Asignaturas
+Listado de Asignaturas por Docentes
+ 
+
+Materiales Productos:
+Listado de Materiales
+Listado de Productos
+Listado de Materiales por Producto

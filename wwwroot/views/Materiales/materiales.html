@@ -22,13 +22,19 @@
                 <h1>Materiales</h1>
                 <p>Administrá el inventario de materiales</p>
             </div>
-            <button class="btn-agregar" type="button" onclick="abrirModalCrear()">
-                <i class="bi bi-plus-lg" aria-hidden="true"></i>
-                Agregar
-            </button>
+            <div class="page-actions">
+                <button type="button" class="btn-imprimir-informe" onclick="imprimir()" title="Generar PDF">
+                    <i class="bi bi-file-earmark-pdf-fill" style="color: rgb(255, 47, 0);" aria-hidden="true"></i>
+                </button>
+                <button class="btn-agregar" type="button" onclick="abrirModalCrear()">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                    Agregar
+                </button>
+            </div>
         </div>
         <hr class="hr-abajoTitulo">
         <div class="table-card">
+            <img id="imgLogo" src="/wwwroot/img/logoPDF.png" style="display: none;">
             <table class="data-table" id="tablaMateriales">
                 <thead>
                     <tr>
@@ -97,11 +103,17 @@
         </div>
     </div>
 
+    <script src="/wwwroot/js/cdnPDF/jspdf.umd.min.js"></script>
+    <script src="/wwwroot/js/cdnPDF/jspdf.plugin.autotable.min.js"></script>
+    <script src="/wwwroot/js/informeMateriales.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <script src="/wwwroot/js/sidebar-loader.js"></script>
     <script src="/wwwroot/js/materiales.js"></script>
 </body>

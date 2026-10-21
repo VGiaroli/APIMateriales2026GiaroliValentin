@@ -94,8 +94,21 @@ a { text-decoration: none; }
 }
 
 .sidebar-header {
-  padding: 2.9rem 1.35rem 1.2rem;
-  border-bottom: 1px solid var(--admin-sidebar-border);
+    height: 67px;
+    padding: 0 1.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom: 1px solid var(--admin-sidebar-border);
+}
+
+.sidebar-header img {
+    width: 115px;
+    height: auto;
+    display: block;
+    object-fit: contain;
 }
 
 .brand-mark {

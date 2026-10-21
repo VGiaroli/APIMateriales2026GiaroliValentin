@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Materiales por Producto</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/wwwroot/css/sidebar.css">
+
+    <link rel="stylesheet" href="/wwwroot/css/table.css">
+    <link rel="stylesheet" href="/wwwroot/css/informeMaterialesPorDocente.css">
+</head>
+
+<body>
+    <div style="padding: 24px;">
+
+        <div class="page-head">
+            <div>
+                <h1>Listado de Materiales por Producto</h1>
+                <p>Podes imprimir tu listado aquí!</p>
+            </div>
+
+            <button type="button" class="btn-imprimir-informe" onclick="imprimir()" title="Generar PDF">
+                <i class="bi bi-file-earmark-pdf-fill" style="color: rgb(255, 47, 0);" aria-hidden="true"></i>
+            </button>
+        </div>
+        <hr class="hr-abajoTitulo">
+
+        <div class="table-card">
+            <img id="imgLogo" src="/wwwroot/img/logoPDF.png" style="display: none;">
+            <!-- AGREGUE LA PALABRA TABLE PARA QUE FUNCIONE EL PINTADO DE LAS FILAS Y SE DIFERENCIE 
+            PRODUCTOS DE MATERIALES-->
+            <table class="data-table table" id="tablaProductos">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Costo Total</th>
+                        <th>Porcentaje Ganancia</th>
+                        <th class="text-center">Precio Venta</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaProductos-tbody"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="/wwwroot/js/cdnPDF/jspdf.umd.min.js"></script>
+    <script src="/wwwroot/js/cdnPDF/jspdf.plugin.autotable.min.js"></script>
+    <script src="/wwwroot/js/informeMaterialesPorProducto.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/wwwroot/js/sidebar-loader.js"></script>
+
+    <script>
+
+        function imprimir() {
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            //const para obtener la img del front
+            const logo = document.getElementById('imgLogo');
+
+            //agrego la imagen al PDF y le paso los parametros
+            pdf.addImage(logo, 'PNG', 181, -2, 25, 20);
+
+
+            // ============================
+            // ENCABEZADO
+            // ============================
+
+            pdf.setFontSize(16);
+            pdf.setFont("helvetica", "bold");
+
+            pdf.text(
+                'INFORME MATERIALES POR PRODUCTO',
+                105,
+                20,
+                { align: 'center' }
+            );
+
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(10);
+
+            // pdf.text(
+            //     'Listado de Materiales por Producto',
+            //     105,
+            //     27,
+            //     { align: 'center' }
+            // );
+
+            pdf.setFontSize(9);
+
+            pdf.text(
+                'Listado de Materiales por Producto',
+                15,
+                38,
+                { align: 'left' }
+            );
+
+            pdf.text(
+                'Fecha: 27/08/2026',
+                195,
+                38,
+                { align: 'right' }
+            );
+
+
+            // Línea debajo del encabezado
+            pdf.setDrawColor(220, 220, 220);
+            pdf.setLineWidth(0.25);
+
+            pdf.line(15, 42, 195, 42);
+
+
+
+            // ============================
+            // TABLA
+            // ============================
+
+            pdf.autoTable({
+
+                html: '#tablaProductos',
+
+                startY: 48,
+
+                theme: 'grid',
+
+                styles: {
+                    font: 'helvetica',
+                    fontSize: 8,
+                    cellPadding: 3,
+                    lineWidth: 0.1,
+                    valign: 'middle'
+                },
+
+                // CABECERA
+                headStyles: {
+                    // fillColor: [204,234,232],
+                    fillColor: [255, 255, 255],
+                    textColor: [0, 0, 0],
+                    fontStyle: 'bold',
+                    //halign: 'center',
+                    valign: 'middle'
+                },
+
+                didParseCell: function (data) {
+
+                    if (data.section === 'head') {
+
+                        if (data.column.index === 0) {
+                            data.cell.styles.halign = 'left';
+                            //esta linea sirve para que las palabras de la cabecera se pongan en MAYUSCULA
+                            data.cell.text = data.cell.text.map(t => t.toUpperCase());
+                        }
+
+                        if (data.column.index === 1) {
+                            data.cell.styles.halign = 'center';
+                            data.cell.text = data.cell.text.map(t => t.toUpperCase());
+                        }
+
+                        if (data.column.index === 2) {
+                            data.cell.styles.halign = 'center';
+                            data.cell.text = data.cell.text.map(t => t.toUpperCase());
+                        }
+
+                        if (data.column.index === 3) {
+                            data.cell.styles.halign = 'center';
+                            //esta linea le da color al titulo de la cabecera.
+                            data.cell.styles.fillColor = [192, 250, 194];
+                            data.cell.text = data.cell.text.map(t => t.toUpperCase());
+                        }
+                    }
+                },
+
+                // CUERPO
+                bodyStyles: {
+                    textColor: [50, 50, 50]
+                },
+
+                // Filas alternadas: cambio COLORES a las filas alternadas
+                alternateRowStyles: {
+                    fillColor: [214, 214, 214]
+                },
+
+                // Bordes
+                tableLineColor: [200, 200, 200],
+                tableLineWidth: 0.1,
+
+                // Columnas
+                columnStyles: {
+                    0: {
+                        halign: 'left',
+                        cellWidth: 72
+                    },
+
+                    1: {
+                        halign: 'right',
+                        cellWidth: 35
+                    },
+
+                    2: {
+                        halign: 'center',
+                        cellWidth: 35
+                    },
+
+                    3: {
+                        halign: 'right',
+                        cellWidth: 40,
+                        //esta linea le da color a la ultima columna (a toda)
+                        fillColor: [192, 250, 194],
+                        fontStyle: 'bold'
+                    }
+                },
+
+                // Repetir encabezado en cada página
+                showHead: 'everyPage',
+
+                // Evitar cortar una fila
+                rowPageBreak: 'avoid'
+            });
+
+
+            // ============================
+            // PIE DE PÁGINA
+            // ============================
+
+            const paginas = pdf.internal.getNumberOfPages();
+
+            for (let i = 1; i <= paginas; i++) {
+
+                pdf.setPage(i);
+
+                // Línea divisoria
+                pdf.setDrawColor(210, 210, 210);
+                pdf.setLineWidth(0.4);
+                pdf.line(15, 284, 195, 284);
+
+                // Nombre del sistema
+                pdf.setFont("helvetica", "bold");
+                pdf.setFontSize(8);
+                pdf.setTextColor(80, 80, 80);
+
+                pdf.text(
+                    "API MATERIALES",
+                    15,
+                    290
+                );
+
+                // Información secundaria
+                pdf.setFont("helvetica", "normal");
+                pdf.setTextColor(120, 120, 120);
+
+                pdf.text(
+                    "Informe de materiales",
+                    105,
+                    290,
+                    { align: "center" }
+                );
+
+                // Paginación
+                pdf.text(
+                    `Página ${i} de ${paginas}`,
+                    195,
+                    290,
+                    { align: "right" }
+                );
+            }
+
+
+            // ============================
+            // GUARDAR
+            // ============================
+
+            // pdf.save('InformePromedios.pdf');
+
+            //ABRIR EN PESTAÑA DEL NAVEGADOR CON EL VISUALIZADOR
+            const pdfBlob = pdf.output('blob');
+            const blobUrl = URL.createObjectURL(pdfBlob);
+            window.open(blobUrl, '_blank');
+        }
+
+    </script>
+</body>
+
+</html>

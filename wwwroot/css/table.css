@@ -18,6 +18,14 @@
   margin-bottom: 1.1rem;
 }
 
+.page-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+
 .page-head h1 {
   margin: 0;
   font-size: 1.6rem;
@@ -27,7 +35,7 @@
 }
 
 .page-head p {
-  margin: 0.2rem 0 0;
+  margin: 0.2rem 0 -4px;
   color: var(--admin-muted);
   font-size: 0.9rem;
 }
@@ -295,4 +303,50 @@ a.row-name:hover { color: var(--admin-accent); }
 .btn-composicion:hover {
     color: #dc6f26;
     transform: scale(1.15);
+}
+
+.ocultarElementos{
+  display: none;
+}
+
+
+.btn-imprimir-informe {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #ffffff, #fff5ec);
+    color: #fff;
+    border: 1px solid #636363;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: filter .15s ease, transform .05s ease;
+}
+
+.btn-imprimir-informe:hover {
+    filter: brightness(1.08);
+}
+
+.btn-imprimir-informe:active {
+    transform: translateY(1px);
+}
+
+.btn-imprimir-informe i {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 480px) {
+    .ip-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .ip-section-header {
+        flex-wrap: wrap;
+    }
+
+    .btn-imprimir-informe {
+        margin-left: auto;
+    }
 }
